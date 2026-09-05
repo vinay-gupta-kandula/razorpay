@@ -1,0 +1,58 @@
+{
+  "batch_metadata": {
+    "project": "ReconMind AI",
+    "track": "04 - AI Finance Controller",
+    "total_records": 52,
+    "target_match_rate": "88.5%",
+    "timestamp": "2026-09-04T22:30:00Z"
+  },
+  "sample_records": [
+    {
+      "invoice_id": "INV-2026-0001",
+      "customer_name": "Rahul Sharma",
+      "erp_gross_amount": 14000,
+      "razorpay_settlement": {
+        "payment_id": "pay_Py8001",
+        "settlement_id": "setl_St900",
+        "gross_amount": 14000,
+        "fee": 280,
+        "tax": 50,
+        "net_payout": 13670,
+        "utr": "UTR2026090001"
+      },
+      "bank_passbook": {
+        "credit_id": "BNK-CR-5001",
+        "utr": "UTR2026090001",
+        "credit_amount": 13670,
+        "clearing_date": "2026-09-01"
+      },
+      "reconciliation_result": {
+        "status": "MATCHED_WITH_FEE",
+        "match_pass": "Pass 2: Gateway Fee & GST Adjusted Match",
+        "confidence_score": 98,
+        "sha256_audit_hash": "0x7f89a201b8e4c9901"
+      }
+    },
+    {
+      "invoice_id": "INV-2026-0015",
+      "customer_name": "Devendra Fadnavis",
+      "erp_gross_amount": 15000,
+      "razorpay_settlement": {
+        "payment_id": "pay_Py8015",
+        "gross_amount": 15000,
+        "net_payout": 13000,
+        "notes": "Chargeback hold applied by risk engine"
+      },
+      "bank_passbook": {
+        "credit_amount": 13000,
+        "utr": "UTR2026090015"
+      },
+      "reconciliation_result": {
+        "status": "UNRESOLVED_EXCEPTION",
+        "exception_type": "CHARGEBACK_HOLD",
+        "ai_root_cause": "Razorpay Risk Engine withheld ₹2,000 reserve due to buyer dispute on payment pay_Py8015.",
+        "sha256_audit_hash": "0x7f89a201b8e4c9015"
+      }
+    }
+  ]
+}

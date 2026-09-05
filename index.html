@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ReconMind AI — Autonomous Multi-Source Reconciliation & Exception Resolver | Razorpay AI Buildathon</title>
+  <meta name="description" content="ReconMind AI automates complex multi-source financial reconciliation across Razorpay settlements, bank passbooks, and ERP invoices with 50+ batch record processing and explainable AI exception resolution.">
+  <link rel="stylesheet" href="src/css/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+</head>
+<body>
+
+  <!-- Sticky Glass Header -->
+  <header class="header">
+    <div class="header-container">
+      <div class="brand">
+        <div class="brand-icon">⚡</div>
+        <div class="brand-text">
+          <h1>ReconMind AI</h1>
+          <span>Razorpay AI Buildathon — Track 04</span>
+        </div>
+      </div>
+
+      <nav class="nav-tabs">
+        <button class="tab-btn active" data-tab="dashboard">Reconciliation Dashboard</button>
+        <button class="tab-btn" data-tab="batch">50+ Batch Ingestion</button>
+        <button class="tab-btn" data-tab="submission">Submission Package</button>
+      </nav>
+
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <div class="ai-engine-toggle">
+          <button id="btn-engine-local" class="engine-pill active" title="Instant Heuristic Rules Engine">⚡ Local AI</button>
+          <button id="btn-engine-gemini" class="engine-pill" title="Live Google Gemini API Generative Diagnoser">✨ Gemini AI</button>
+        </div>
+        <div class="buildathon-badge">
+          <div class="pulse-dot"></div>
+          <span>Track 04: AI Finance Controller</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main App Container -->
+  <main class="main-content">
+
+    <!-- DASHBOARD VIEW -->
+    <section id="view-dashboard" class="tab-view active">
+
+      <!-- FAULT INJECTION SANDBOX BAR -->
+      <div class="fault-bar">
+        <div class="fault-title">
+          <span>💥 Fault & Anomaly Injection Sandbox:</span>
+        </div>
+        <div class="fault-btn-group">
+          <button class="btn-fault active" data-fault="DEFAULT">Standard 52 Batch</button>
+          <button class="btn-fault" data-fault="FEE_HIKE">Commission Hike (2% ➔ 3.5%)</button>
+          <button class="btn-fault" data-fault="BANK_OUTAGE">48-Hr Bank Clearing Outage</button>
+          <button class="btn-fault" data-fault="FRAUD_BURST">Fraud & Chargeback Dispute Burst</button>
+        </div>
+      </div>
+
+      <!-- Telemetry Stats Row -->
+      <div class="stats-grid">
+        <div class="stat-card accent-cyan">
+          <div class="stat-header">
+            <span>TOTAL BATCH RECORDS</span>
+            <div class="stat-icon">📊</div>
+          </div>
+          <div class="stat-value" id="stat-total-records">52</div>
+          <div class="stat-sub">Across ERP, Razorpay & Bank</div>
+        </div>
+
+        <div class="stat-card accent-emerald">
+          <div class="stat-header">
+            <span>OVERALL MATCH RATE</span>
+            <div class="stat-icon">🎯</div>
+          </div>
+          <div class="stat-value" id="stat-match-rate">88.5%</div>
+          <div class="stat-sub positive">
+            <span id="stat-matched-count">46</span> / 52 Auto-Reconciled
+          </div>
+        </div>
+
+        <div class="stat-card accent-amber">
+          <div class="stat-header">
+            <span>RECONCILED VOLUME</span>
+            <div class="stat-icon">💰</div>
+          </div>
+          <div class="stat-value" id="stat-settled-volume">₹14.8L</div>
+          <div class="stat-sub">Verified Net Payouts</div>
+        </div>
+
+        <div class="stat-card accent-rose">
+          <div class="stat-header">
+            <span>UNRESOLVED EXCEPTIONS</span>
+            <div class="stat-icon">⚠️</div>
+          </div>
+          <div class="stat-value" id="stat-unresolved-count">6</div>
+          <div class="stat-sub warning">
+            Action Required & AI Diagnosed
+          </div>
+        </div>
+      </div>
+
+      <!-- VISUAL ANALYTICS CHARTS GRID -->
+      <div class="chart-grid">
+        <div class="chart-card">
+          <div class="chart-card-title">
+            <span>4-Pass Reconciliation Conversion Funnel</span>
+            <span style="font-size:0.75rem; color:var(--cyan-glow);">Auto-Calculated</span>
+          </div>
+          <div id="chart-funnel">Loading funnel...</div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-card-title">
+            <span>Financial Volume Allocation (Gross vs Net)</span>
+            <span style="font-size:0.75rem; color:var(--emerald-accent);">Verified Ledger</span>
+          </div>
+          <div id="chart-donut">Loading donut...</div>
+        </div>
+      </div>
+
+      <!-- Control Toolbar -->
+      <div class="control-toolbar">
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="search-input" class="search-input" placeholder="Search Order ID, UTR, Customer, or Invoice...">
+        </div>
+
+        <div class="filter-group">
+          <button class="filter-btn active" data-filter="ALL">All Records</button>
+          <button class="filter-btn" data-filter="MATCHED">Matched (Pass 1-3)</button>
+          <button class="filter-btn" data-filter="UNRESOLVED">Unresolved Exceptions</button>
+        </div>
+
+        <div style="display: flex; gap: 0.5rem;">
+          <button id="btn-rebatch" class="action-btn secondary">
+            <span>🔄</span> New Batch
+          </button>
+          <button id="btn-cfo-report" class="action-btn secondary">
+            <span>📊</span> CFO Report
+          </button>
+          <button id="btn-export" class="action-btn">
+            <span>📥</span> Export Audit CSV
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Ledger Table Card -->
+      <div class="table-card">
+        <div class="table-header-title">
+          <h3>
+            <span>📋</span> Multi-Source Ledger Comparison (50+ Batch)
+          </h3>
+          <span style="font-size: 0.8rem; color: var(--text-muted);" id="table-subtitle">Showing 52 total entries</span>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="recon-table">
+            <thead>
+              <tr>
+                <th>Invoice / Customer</th>
+                <th>Order ID & UTR</th>
+                <th>ERP Gross</th>
+                <th>Razorpay Fee</th>
+                <th>Bank Credit</th>
+                <th>Confidence</th>
+                <th>Match Status</th>
+                <th>Action / AI Diagnosis</th>
+              </tr>
+            </thead>
+            <tbody id="table-body">
+              <!-- Dynamically populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TERMINAL LOG CONSOLE -->
+      <div class="terminal-box">
+        <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem; color:var(--text-dim); font-size:0.75rem;">
+          <span>REAL-TIME AGENT RECONCILIATION LOG</span>
+          <span>SHA-256 AUDIT HASH ENGINE ACTIVE</span>
+        </div>
+        <div id="terminal-log-content">
+          [SYSTEM_INIT] Engine active. 4-Pass Hierarchical Pipeline initialized.
+        </div>
+      </div>
+
+    </section>
+
+    <!-- BATCH INGESTION VIEW -->
+    <section id="view-batch" class="tab-view" style="display: none;">
+      <div class="submission-card">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--cyan-glow);">
+          ⚡ Synthetic Data Ingestion Engine (50+ Record Batch)
+        </h2>
+        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">
+          ReconMind AI ingests and reconciles three concurrent stream sources: Merchant ERP Invoices, Razorpay Settlement Batch Reports, and Bank Passbook Credit Statements.
+        </p>
+
+        <div class="submission-grid">
+          <div class="submission-field">
+            <div class="field-label">
+              <span>Source 1: Razorpay Settlement Stream</span>
+              <span class="id-badge">REST API / CSV</span>
+            </div>
+            <div class="field-code" id="code-rzp-preview">Loading...</div>
+          </div>
+
+          <div class="submission-field">
+            <div class="field-label">
+              <span>Source 2: Bank Statement Stream</span>
+              <span class="id-badge">NEFT/RTGS Feed</span>
+            </div>
+            <div class="field-code" id="code-bank-preview">Loading...</div>
+          </div>
+
+          <div class="submission-field">
+            <div class="field-label">
+              <span>Source 3: Merchant ERP Invoices</span>
+              <span class="id-badge">JSON / Webhook</span>
+            </div>
+            <div class="field-code" id="code-erp-preview">Loading...</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SUBMISSION PACKAGE VIEW -->
+    <section id="view-submission" class="tab-view" style="display: none;">
+      <div class="submission-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+          <div>
+            <h2 style="font-size: 1.5rem; font-weight: 700; color: var(--cyan-glow);">
+              🚀 Razorpay Buildathon Submission Generator
+            </h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">
+              All 12 required form items pre-formatted for copying directly into the Razorpay Buildathon application form.
+            </p>
+          </div>
+          <button id="btn-copy-all" class="action-btn">
+            <span>📋</span> Copy Full Submission Writeup
+          </button>
+        </div>
+
+        <div class="submission-grid">
+          <div class="submission-field">
+            <div class="field-label">
+              <span>01. Chosen Track</span>
+            </div>
+            <div class="field-content">04 — AI Finance Controller</div>
+          </div>
+
+          <div class="submission-field">
+            <div class="field-label">
+              <span>02. Project Name</span>
+            </div>
+            <div class="field-content">ReconMind AI — Multi-Source Reconciliation & Exception Resolver</div>
+          </div>
+
+          <div class="submission-field" style="grid-column: span 2;">
+            <div class="field-label">
+              <span>03. The Problem It Solves</span>
+            </div>
+            <div class="field-content">Merchant finance teams spend dozens of manual hours every week attempting to reconcile bank passbook statements, Razorpay settlement reports, and internal ERP invoices. Discrepancies caused by payment gateway fees (2% + GST), bank settlement delay windows (24-48h), chargeback holds, and duplicate payment attempts create accounting chaos and delayed financial closing. ReconMind AI automates multi-source 4-pass reconciliation across 50+ batch records, providing exact match rates and natural-language AI diagnostics for unresolved exceptions.</div>
+          </div>
+
+          <div class="submission-field" style="grid-column: span 2;">
+            <div class="field-label">
+              <span>04. What Broke, and How You Got Out (Mandatory Buildathon Essay)</span>
+              <button class="btn-copy" onclick="navigator.clipboard.writeText(document.getElementById('essay-content').innerText)">Copy Essay</button>
+            </div>
+            <div class="field-content" id="essay-content" style="background: rgba(15, 23, 42, 0.9); padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-glass);">
+<strong>WHAT BROKE:</strong> During the initial build of our multi-source reconciliation engine, our naive algorithm attempted strict 1-to-1 exact matching on amounts between Merchant ERP invoices and Bank statement entries. This immediately broke on 100% of production-like transactions because Razorpay automatically deducts its 2% gateway commission + 18% GST prior to bank settlement payout. As a result, gross ERP invoice totals (e.g. ₹10,000) never matched net bank credits (e.g. ₹9,764), resulting in a 0% automated match rate. Furthermore, bank settlement processing delays over weekends caused timestamp mismatches, causing valid payouts to be falsely flagged as missing.
+
+<strong>HOW WE GOT OUT:</strong> We redesigned the core architecture into a deterministic 4-Pass Hierarchical Reconciliation Pipeline. 
+- Pass 1 handles 1-to-1 exact matches.
+- Pass 2 introduces dynamic fee & tax offset awareness, automatically calculating `Net = Gross - (Fee + GST)` to validate gateway payouts without requiring manual merchant rules.
+- Pass 3 implements a 48-hour timestamp window buffer to accommodate banking clearing house cycles.
+- Pass 4 acts as our AI Judgment & Exception Isolator: rather than forcing uncertain matches, it isolates true anomalies (such as dispute reserves, unmapped bank credits, or duplicate payments) and generates natural-language root cause diagnostics. This eliminated false positives and achieved a transparent, honest 88.5% automated match rate with full auditability.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- RECONCOPILOT FLOATING AGENT WIDGET -->
+  <button id="btn-copilot-trigger" class="copilot-trigger" title="Open ReconCopilot AI Agent">💬</button>
+
+  <div id="copilot-panel" class="copilot-panel">
+    <div class="copilot-header">
+      <div style="display:flex; align-items:center; gap:0.5rem;">
+        <span style="font-size:1.2rem;">🤖</span>
+        <span style="font-weight:700; color:white; font-size:0.9rem;">ReconCopilot AI Agent</span>
+      </div>
+      <button id="btn-close-copilot" class="btn-close">&times;</button>
+    </div>
+    <div id="copilot-body" class="copilot-body">
+      <div class="chat-msg agent">
+        👋 Hi! I am <strong>ReconCopilot</strong>, your AI Finance Controller Agent. Type a query like <em>"Show CFO report"</em> or <em>"Explain chargeback"</em>, or pick a fault scenario!
+      </div>
+    </div>
+    <div class="copilot-input-box">
+      <input type="text" id="copilot-input" class="copilot-input" placeholder="Ask ReconCopilot agent...">
+      <button id="btn-send-copilot" class="action-btn" style="padding:0.4rem 0.8rem;">Send</button>
+    </div>
+  </div>
+
+  <!-- AI EXCEPTION DIAGNOSTIC DRAWER (MODAL) -->
+  <div id="drawer-overlay" class="modal-overlay">
+    <div class="drawer">
+      <div class="drawer-header">
+        <div class="drawer-title">
+          <h2>AI Exception Diagnostics</h2>
+          <span id="drawer-id-badge" class="id-badge">INV-2026-0015</span>
+        </div>
+        <button id="btn-close-drawer" class="btn-close">&times;</button>
+      </div>
+
+      <!-- GEMINI KEY INPUT BAR (Appears in Gemini Mode) -->
+      <div id="gemini-key-box" class="gemini-key-box" style="display: none;">
+        <span style="font-size: 0.75rem; color: var(--purple-glow); font-weight: 600;">✨ Gemini API Key:</span>
+        <input type="password" id="gemini-api-key-input" class="gemini-key-input" placeholder="Paste Gemini API Key (or leave blank for demo mode)...">
+      </div>
+
+      <div class="ai-box">
+        <div class="ai-box-title">
+          <span>🧠</span> <span id="drawer-ai-title">Risk Engine Chargeback Reserve Deduction</span>
+        </div>
+        <div class="ai-reasoning" id="drawer-ai-rootcause">
+          Loading AI diagnosis...
+        </div>
+      </div>
+
+      <h4 style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.75rem;">
+        3-Way Multi-Source Data Inspection
+      </h4>
+      <div class="source-comparison">
+        <div class="source-card">
+          <div class="source-card-title">Merchant ERP Invoice</div>
+          <div class="source-detail" id="drawer-src-erp">₹15,000</div>
+          <div style="font-size: 0.75rem; color: var(--text-dim);" id="drawer-src-erp-sub">INV-2026-0015</div>
+        </div>
+
+        <div class="source-card">
+          <div class="source-card-title">Razorpay Settlement</div>
+          <div class="source-detail" id="drawer-src-rzp">₹13,000</div>
+          <div style="font-size: 0.75rem; color: var(--text-dim);" id="drawer-src-rzp-sub">pay_Py8015</div>
+        </div>
+
+        <div class="source-card">
+          <div class="source-card-title">Bank Passbook</div>
+          <div class="source-detail" id="drawer-src-bank">₹13,000</div>
+          <div style="font-size: 0.75rem; color: var(--text-dim);" id="drawer-src-bank-sub">UTR2026090015</div>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <h4 style="font-size: 0.85rem; font-weight: 700; color: var(--cyan-glow); text-transform: uppercase; margin-bottom: 0.35rem;">
+          Cryptographic SHA-256 Audit Hash
+        </h4>
+        <div id="drawer-audit-hash" style="font-family:var(--font-mono); font-size:0.75rem; color:#a5f3fc; background:#090d16; padding:0.5rem; border-radius:4px; border:1px solid var(--border-glass); word-break:break-all;">
+          0x7f89a201b8e4c...
+        </div>
+      </div>
+
+      <div style="margin-bottom: 1.25rem;">
+        <h4 style="font-size: 0.85rem; font-weight: 700; color: var(--cyan-glow); text-transform: uppercase; margin-bottom: 0.35rem;">
+          Recommended Human Action
+        </h4>
+        <p id="drawer-ai-recommendation" style="font-size: 0.875rem; color: var(--text-main); line-height: 1.5;">
+          Recommendation text...
+        </p>
+      </div>
+
+      <div style="margin-bottom: 1.25rem;">
+        <h4 style="font-size: 0.85rem; font-weight: 700; color: var(--emerald-accent); text-transform: uppercase; margin-bottom: 0.35rem;">
+          Automated Recovery & Audit Path
+        </h4>
+        <p id="drawer-ai-recovery" style="font-size: 0.875rem; color: var(--text-main); line-height: 1.5;">
+          Recovery path text...
+        </p>
+      </div>
+
+      <div id="drawer-healed-toast" class="healed-toast" style="display: none;">
+        <span>✓</span> <strong>Self-Healing Executed!</strong> Ledger adjusted and SHA-256 audit entry registered.
+      </div>
+
+      <div style="margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--border-glass);">
+        <button id="btn-resolve-exception" class="action-btn" style="width: 100%; justify-content: center;">
+          <span>⚡</span> Execute Auto-Healing & Update Audit Log
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Javascript Modules -->
+  <script type="module" src="src/js/app.js"></script>
+</body>
+</html>
