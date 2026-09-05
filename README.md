@@ -111,10 +111,4 @@ To run and verify **ReconMind AI** locally:
 
 ---
 
-## 📽️ 5-Minute Pitch Video Outline
 
-1. **0:00 - 0:45:** The Problem — Why merchant finance teams dread monthly reconciliation (Gateway fees, Bank delays, Disputes).
-2. **0:45 - 2:00:** Live Demo of `ReconMind AI` — Loading 52 synthetic records & displaying the 88.5% Match Rate.
-3. **2:00 - 3:30:** Deep-dive into Pass 2 (Fee & Tax Offset) and Pass 4 (AI Exception Drawer for Chargeback Holds).
-4. **3:30 - 4:30:** Highlighting "What Broke & How We Got Out" — Dynamic pipeline redesign over strict matching.
-5. **4:30 - 5:00:** Summary & Vision for Razorpay Integration.
